@@ -8,6 +8,10 @@ const API_BASE = (
   'http://localhost:5000/api/v1'
 ).replace(/\/+$/, '');
 
+if (!API_BASE) {
+  throw new Error('VITE_API_URL is not configured');
+}
+
 async function fetchJson(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
   const defaultHeaders = {
