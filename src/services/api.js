@@ -3,7 +3,10 @@
  * Communicates with Express.js Backend at /api/v1
  */
 
-const API_BASE = '/api/v1';
+const API_BASE = (
+  import.meta.env.VITE_API_URL ||
+  'http://localhost:5000/api/v1'
+).replace(/\/+$/, '');
 
 async function fetchJson(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
