@@ -12,7 +12,11 @@ import {
   Clock,
   Layers,
   Server,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Code2,
+  Wrench,
+  Settings,
+  Zap
 } from 'lucide-react';
 
 const ICON_MAP = {
@@ -29,7 +33,11 @@ const ICON_MAP = {
   clock: Clock,
   layers: Layers,
   server: Server,
-  fileSpreadsheet: FileSpreadsheet
+  fileSpreadsheet: FileSpreadsheet,
+  code2: Code2,
+  wrench: Wrench,
+  settings: Settings,
+  zap: Zap
 };
 
 export function getProductIcon(iconKey, fallback = Package) {

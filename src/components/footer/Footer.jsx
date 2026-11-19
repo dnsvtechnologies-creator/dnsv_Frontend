@@ -4,16 +4,18 @@ import { Mail, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import DNSVHorizontalLogo from '../common/DNSVHorizontalLogo.jsx';
 import { BRAND } from '../../constants/brand.js';
 import { INITIAL_PRODUCTS } from '../../constants/productSeedData.js';
+import { INITIAL_SERVICES } from '../../constants/serviceSeedData.js';
 import { apiService } from '../../services/api.js';
 
 export default function Footer() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState({ loading: false, success: false, message: '' });
   const [productsList, setProductsList] = useState(INITIAL_PRODUCTS);
+  const [servicesList, setServicesList] = useState(INITIAL_SERVICES);
 
   useEffect(() => {
     let active = true;
-    const syncProducts = () => {
+    const syncCatalog = () => {
       apiService
         .getProducts()
         .then((res) => {
@@ -22,13 +24,22 @@ export default function Footer() {
           }
         })
         .catch(() => {});
+
+      apiService
+        .getServices()
+        .then((res) => {
+          if (active && Array.isArray(res?.data)) {
+            setServicesList(res.data);
+          }
+        })
+        .catch(() => {});
     };
 
-    syncProducts();
-    window.addEventListener('dnsv:catalog-updated', syncProducts);
+    syncCatalog();
+    window.addEventListener('dnsv:catalog-updated', syncCatalog);
     return () => {
       active = false;
-      window.removeEventListener('dnsv:catalog-updated', syncProducts);
+      window.removeEventListener('dnsv:catalog-updated', syncCatalog);
     };
   }, []);
 
@@ -110,11 +121,13 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#00D2FF]">Solutions</h3>
             <ul className="flex flex-col gap-2 text-xs text-slate-400">
-              <li><Link to="/services/web-development" className="hover:text-[#00D2FF] transition-colors">Website Development</Link></li>
-              <li><Link to="/services/custom-software" className="hover:text-[#00D2FF] transition-colors">Custom Software & CRM</Link></li>
-              <li><Link to="/services/email-marketing" className="hover:text-[#00D2FF] transition-colors">Email Automation (Mautic)</Link></li>
-              <li><Link to="/services/api-development" className="hover:text-[#00D2FF] transition-colors">API & Gateway Integration</Link></li>
-              <li><Link to="/services/technical-support" className="hover:text-[#00D2FF] transition-colors">Maintenance & Retainers</Link></li>
+              {servicesList.map((svc) => (
+                <li key={svc.slug}>
+                  <Link to={`/services/${svc.slug}`} className="hover:text-[#00D2FF] transition-colors">
+                    {svc.shortLabel || svc.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

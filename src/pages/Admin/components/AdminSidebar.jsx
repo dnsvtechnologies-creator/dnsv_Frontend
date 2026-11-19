@@ -8,6 +8,7 @@ import {
   Mail,
   Tag,
   Package,
+  Wrench,
   Settings,
   LogOut,
   X
@@ -32,6 +33,7 @@ export default function AdminSidebar({
     { id: 'newsletter', label: 'Newsletter List', icon: Mail, count: counts.totalSubscribers ?? 0 },
     { id: 'pricing', label: 'Pricing Plans', icon: Tag, count: counts.totalPricingPlans ?? 0 },
     { id: 'products', label: 'Products Catalog', icon: Package, count: counts.totalProducts ?? 0 },
+    { id: 'services', label: 'Services Catalog', icon: Wrench, count: counts.totalServices ?? 0 },
     { id: 'settings', label: 'Site Settings', icon: Settings, count: null }
   ];
 

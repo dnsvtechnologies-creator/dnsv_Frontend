@@ -148,6 +148,30 @@ export const apiService = {
     return fetchJson(`/products/${encodeURIComponent(slug)}`);
   },
 
+  // Services (Dynamic Engineering Services Catalog — deduplicated + cached)
+  async getServices() {
+    return cachedGet('services', async () => {
+      try {
+        return await fetchJson('/services');
+      } catch (err) {
+        console.warn('[API Service] Using local services fallback:', err.message);
+        const { INITIAL_SERVICES, INITIAL_SERVICES_PAGE_CONFIG } = await import(
+          '../constants/serviceSeedData.js'
+        );
+        return {
+          success: true,
+          count: INITIAL_SERVICES.length,
+          data: INITIAL_SERVICES,
+          pageConfig: INITIAL_SERVICES_PAGE_CONFIG
+        };
+      }
+    });
+  },
+
+  async getServiceBySlug(slug) {
+    return fetchJson(`/services/${encodeURIComponent(slug)}`);
+  },
+
   // Site Settings (deduplicated + cached)
   async getSiteSettings() {
     return cachedGet('site-settings', () => fetchJson('/site-settings'));
@@ -433,6 +457,49 @@ export const apiService = {
       headers: { Authorization: `Bearer ${token}` }
     });
     invalidateCatalogCache('products');
+    return res;
+  },
+
+  async updateAdminServicePageConfig(payload) {
+    const token = this.getAdminToken();
+    const res = await fetchJson('/admin/services/config', {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+    invalidateCatalogCache('services');
+    return res;
+  },
+
+  async createAdminService(payload) {
+    const token = this.getAdminToken();
+    const res = await fetchJson('/admin/services', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+    invalidateCatalogCache('services');
+    return res;
+  },
+
+  async updateAdminService(id, payload) {
+    const token = this.getAdminToken();
+    const res = await fetchJson(`/admin/services/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+    invalidateCatalogCache('services');
+    return res;
+  },
+
+  async deleteAdminService(id) {
+    const token = this.getAdminToken();
+    const res = await fetchJson(`/admin/services/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    invalidateCatalogCache('services');
     return res;
   },
 

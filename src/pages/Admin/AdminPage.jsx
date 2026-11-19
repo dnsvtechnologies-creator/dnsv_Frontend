@@ -19,6 +19,7 @@ import AdminDetailModal from './components/AdminDetailModal.jsx';
 import { AdminSettingsPanel } from './components/AdminCmsAndSettings.jsx';
 import AdminPricingPanel from './components/AdminPricingPanel.jsx';
 import AdminProductsPanel from './components/AdminProductsPanel.jsx';
+import AdminServicesPanel from './components/AdminServicesPanel.jsx';
 
 const TAB_TITLES = {
   overview: 'Overview',
@@ -29,6 +30,7 @@ const TAB_TITLES = {
   newsletter: 'Newsletter Subscribers',
   pricing: 'Pricing Plans Management',
   products: 'Products Catalog Management',
+  services: 'Services Catalog Management',
   settings: 'Site Settings'
 };
 
@@ -584,9 +586,9 @@ export default function AdminPage() {
                         <span className="font-semibold text-[#0F172A]">{dbInfo.mode || 'In-Memory Resilient Store'}</span>
                       </div>
                       <div className="py-2.5 flex items-center justify-between">
-                        <span className="text-slate-600">Published Products &amp; Plans</span>
+                        <span className="text-slate-600">Published Catalog &amp; Plans</span>
                         <span className="font-mono tabular-nums font-bold text-[#0F172A]">
-                          {summary.totalProducts ?? 0} products · {summary.totalPricingPlans ?? 0} plans
+                          {summary.totalServices ?? 0} services · {summary.totalProducts ?? 0} products · {summary.totalPricingPlans ?? 0} plans
                         </span>
                       </div>
                       <div className="py-2.5 flex items-center justify-between">
@@ -614,10 +616,10 @@ export default function AdminPage() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setActiveTab('users')}
-                        className="py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-[#0F172A] transition-colors"
+                        onClick={() => setActiveTab('services')}
+                        className="py-2 px-3 rounded-xl text-xs font-semibold bg-sky-50 hover:bg-sky-100 text-[#0284C7] transition-colors"
                       >
-                        Users &amp; Leads
+                        Manage Services
                       </button>
                       <button
                         type="button"
@@ -1142,6 +1144,30 @@ export default function AdminPage() {
               }}
               onDeleteProduct={async (id) => {
                 await apiService.deleteAdminProduct(id);
+                await loadDashboard();
+              }}
+            />
+          )}
+
+          {/* SERVICES CATALOG TAB */}
+          {activeTab === 'services' && (
+            <AdminServicesPanel
+              services={dashboard?.services || []}
+              servicePageConfig={dashboard?.servicePageConfig}
+              onCreateService={async (payload) => {
+                await apiService.createAdminService(payload);
+                await loadDashboard();
+              }}
+              onUpdateService={async (id, payload) => {
+                await apiService.updateAdminService(id, payload);
+                await loadDashboard();
+              }}
+              onDeleteService={async (id) => {
+                await apiService.deleteAdminService(id);
+                await loadDashboard();
+              }}
+              onSavePageConfig={async (payload) => {
+                await apiService.updateAdminServicePageConfig(payload);
                 await loadDashboard();
               }}
             />

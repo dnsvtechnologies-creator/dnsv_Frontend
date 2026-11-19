@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Code2,
-  Cpu,
-  Mail,
-  Layers,
-  Wrench,
   CheckCircle2,
   ChevronDown,
   Shield,
@@ -19,25 +15,43 @@ import { PageWrapper, FadeIn, StaggerContainer, StaggerItem, HoverCard } from '.
 import { useUserAuth } from '../../context/UserAuthContext.jsx';
 import LoginRequiredGate from '../../components/auth/LoginRequiredGate.jsx';
 import { INITIAL_PRODUCTS } from '../../constants/productSeedData.js';
+import { INITIAL_SERVICES } from '../../constants/serviceSeedData.js';
 import { apiService } from '../../services/api.js';
+import { getProductIcon } from '../../utils/productIcons.js';
 
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(0);
   const { isAuthenticated } = useUserAuth();
   const [productsList, setProductsList] = useState(INITIAL_PRODUCTS);
+  const [servicesList, setServicesList] = useState(INITIAL_SERVICES);
 
   useEffect(() => {
     let active = true;
-    apiService
-      .getProducts()
-      .then((res) => {
-        if (active && Array.isArray(res?.data)) {
-          setProductsList(res.data);
-        }
-      })
-      .catch(() => {});
+    const syncCatalog = () => {
+      apiService
+        .getProducts()
+        .then((res) => {
+          if (active && Array.isArray(res?.data)) {
+            setProductsList(res.data);
+          }
+        })
+        .catch(() => {});
+
+      apiService
+        .getServices()
+        .then((res) => {
+          if (active && Array.isArray(res?.data)) {
+            setServicesList(res.data);
+          }
+        })
+        .catch(() => {});
+    };
+
+    syncCatalog();
+    window.addEventListener('dnsv:catalog-updated', syncCatalog);
     return () => {
       active = false;
+      window.removeEventListener('dnsv:catalog-updated', syncCatalog);
     };
   }, []);
 
@@ -181,25 +195,20 @@ export default function HomePage() {
         </FadeIn>
 
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            { icon: Code2, title: 'Website Design & Development', desc: 'Business websites, portfolio platforms, responsive web apps, and SEO-ready React interfaces.', slug: '/services/web-development' },
-            { icon: Cpu, title: 'Custom Software Development', desc: 'Bespoke CRM portals, admin dashboards, inventory workflows, and multi-tenant SaaS products.', slug: '/services/custom-software' },
-            { icon: Mail, title: 'Email Marketing & Automation', desc: 'Mailcurve campaigns, Mautic setup, SMTP clusters, and SPF/DKIM/DMARC alignment.', slug: '/services/email-marketing' },
-            { icon: Layers, title: 'API Development & Integration', desc: 'Secure REST APIs, payment gateway integrations, CRM sync, and verified webhooks.', slug: '/services/api-development' },
-            { icon: Wrench, title: 'Technical Support & Maintenance', desc: 'Linux VPS administration, MongoDB backups, security patching, and SLA maintenance retainers.', slug: '/services/technical-support' }
-          ].map((svc, idx) => {
-            const Icon = svc.icon;
+          {servicesList.map((svc, idx) => {
+            const Icon = getProductIcon(svc.iconKey, Code2);
+            const isLastOdd = idx === servicesList.length - 1 && servicesList.length % 3 === 2;
             return (
-              <StaggerItem key={idx} className={idx === 4 ? 'md:col-span-2 lg:col-span-2' : ''}>
+              <StaggerItem key={svc.slug || idx} className={isLastOdd ? 'md:col-span-2 lg:col-span-2' : ''}>
                 <HoverCard className="p-6 rounded-xl border transition-all h-full flex flex-col justify-between bg-[#FFFFFF] border-[#17213A]/15 hover:border-[#2563EB]/50 shadow-sm">
                   <div>
                     <div className="w-10 h-10 rounded-lg bg-[#2563EB]/15 border border-[#2563EB]/30 flex items-center justify-center text-[#2563EB] mb-4">
                       <Icon className="w-5 h-5" />
                     </div>
                     <h3 className="text-lg font-bold mb-2 text-[#111111]">{svc.title}</h3>
-                    <p className="text-xs leading-relaxed mb-4 text-[#17213A]/75">{svc.desc}</p>
+                    <p className="text-xs leading-relaxed mb-4 text-[#17213A]/75">{svc.summary}</p>
                   </div>
-                  <Link to={svc.slug} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] hover:underline">
+                  <Link to={`/services/${svc.slug}`} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] hover:underline">
                     Explore Service <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </HoverCard>

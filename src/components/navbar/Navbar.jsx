@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, ArrowRight, UserCheck, LogIn } from 'lucide-react
 import DNSVRoundedLogo from '../common/DNSVRoundedLogo.jsx';
 import { NAV_LINKS } from '../../constants/brand.js';
 import { INITIAL_PRODUCTS } from '../../constants/productSeedData.js';
+import { INITIAL_SERVICES } from '../../constants/serviceSeedData.js';
 import { apiService } from '../../services/api.js';
 import { useUserAuth } from '../../context/UserAuthContext.jsx';
 
@@ -13,12 +14,13 @@ export default function Navbar() {
   const [servicesDropdown, setServicesDropdown] = useState(false);
   const [productsDropdown, setProductsDropdown] = useState(false);
   const [productsList, setProductsList] = useState(INITIAL_PRODUCTS);
+  const [servicesList, setServicesList] = useState(INITIAL_SERVICES);
   const location = useLocation();
   const { user, isAuthenticated, openLoginBox } = useUserAuth();
 
   useEffect(() => {
     let active = true;
-    const syncProducts = () => {
+    const syncCatalog = () => {
       apiService
         .getProducts()
         .then((res) => {
@@ -27,13 +29,22 @@ export default function Navbar() {
           }
         })
         .catch(() => {});
+
+      apiService
+        .getServices()
+        .then((res) => {
+          if (active && Array.isArray(res?.data)) {
+            setServicesList(res.data);
+          }
+        })
+        .catch(() => {});
     };
 
-    syncProducts();
-    window.addEventListener('dnsv:catalog-updated', syncProducts);
+    syncCatalog();
+    window.addEventListener('dnsv:catalog-updated', syncCatalog);
     return () => {
       active = false;
-      window.removeEventListener('dnsv:catalog-updated', syncProducts);
+      window.removeEventListener('dnsv:catalog-updated', syncCatalog);
     };
   }, []);
 
@@ -150,18 +161,24 @@ export default function Navbar() {
                   <div className="text-[10px] uppercase font-bold tracking-wider text-[#0284C7] px-3 py-1.5 border-b border-sky-500/20 mb-1">
                     IT Solutions & Services
                   </div>
-                  {NAV_LINKS.find(n => n.label === 'Services')?.children?.map(sub => (
-                    <Link
-                      key={sub.path}
-                      to={sub.path}
-                      className="block px-3 py-2 rounded-lg text-xs transition-colors hover:bg-sky-50 text-slate-800"
-                    >
-                      <div className="font-semibold">{sub.label}</div>
-                      <div className="text-[11px] mt-0.5 text-slate-500">
-                        {sub.desc}
-                      </div>
-                    </Link>
-                  ))}
+                  {servicesList.length === 0 ? (
+                    <div className="px-3 py-2 text-xs text-slate-500">
+                      No active services listed.
+                    </div>
+                  ) : (
+                    servicesList.map((svc) => (
+                      <Link
+                        key={svc.slug}
+                        to={`/services/${svc.slug}`}
+                        className="block px-3 py-2 rounded-lg text-xs transition-colors hover:bg-sky-50 text-slate-800"
+                      >
+                        <div className="font-semibold">{svc.title}</div>
+                        <div className="text-[11px] mt-0.5 text-slate-500 truncate">
+                          {svc.dropdownDesc || svc.category || svc.summary}
+                        </div>
+                      </Link>
+                    ))
+                  )}
                 </div>
               )}
             </div>
@@ -328,11 +345,15 @@ export default function Navbar() {
                 Services
               </Link>
               <div className="flex flex-col gap-2 pl-2 text-xs">
-                <Link to="/services/web-development" className="hover:text-[#2563EB]">Website Design & Development</Link>
-                <Link to="/services/custom-software" className="hover:text-[#2563EB]">Custom Software Development</Link>
-                <Link to="/services/email-marketing" className="hover:text-[#2563EB]">Email Marketing & Automation</Link>
-                <Link to="/services/api-development" className="hover:text-[#2563EB]">API Development & Integration</Link>
-                <Link to="/services/technical-support" className="hover:text-[#2563EB]">Technical Support & Maintenance</Link>
+                {servicesList.map((svc) => (
+                  <Link
+                    key={svc.slug}
+                    to={`/services/${svc.slug}`}
+                    className="hover:text-[#2563EB]"
+                  >
+                    {svc.title}
+                  </Link>
+                ))}
               </div>
             </div>
 
