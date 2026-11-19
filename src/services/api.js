@@ -172,6 +172,41 @@ export const apiService = {
     return fetchJson(`/services/${encodeURIComponent(slug)}`);
   },
 
+  // Careers (Open access with live catalog cache)
+  async getCareers() {
+    return cachedGet('careers', async () => {
+      try {
+        return await fetchJson('/careers');
+      } catch (err) {
+        console.warn('[API Service] Using local careers fallback:', err.message);
+        const { INITIAL_CAREER_JOBS, INITIAL_CAREER_CONFIG } = await import(
+          '../constants/careerSeedData.js'
+        );
+        return {
+          success: true,
+          data: {
+            jobs: INITIAL_CAREER_JOBS,
+            pageConfig: INITIAL_CAREER_CONFIG,
+            meta: {
+              totalOpenRoles: INITIAL_CAREER_JOBS.length,
+              totalVisibleRoles: INITIAL_CAREER_JOBS.length,
+              filteredCount: INITIAL_CAREER_JOBS.length,
+              departments: [],
+              workModes: []
+            }
+          }
+        };
+      }
+    });
+  },
+
+  async submitCareerApplication(payload) {
+    return fetchJson('/careers/apply', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  },
+
   // Site Settings (deduplicated + cached)
   async getSiteSettings() {
     return cachedGet('site-settings', () => fetchJson('/site-settings'));
@@ -501,6 +536,66 @@ export const apiService = {
     });
     invalidateCatalogCache('services');
     return res;
+  },
+
+  async updateAdminCareerConfig(payload) {
+    const token = this.getAdminToken();
+    const res = await fetchJson('/admin/careers/config', {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+    invalidateCatalogCache('careers');
+    return res;
+  },
+
+  async createAdminCareerJob(payload) {
+    const token = this.getAdminToken();
+    const res = await fetchJson('/admin/careers/jobs', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+    invalidateCatalogCache('careers');
+    return res;
+  },
+
+  async updateAdminCareerJob(id, payload) {
+    const token = this.getAdminToken();
+    const res = await fetchJson(`/admin/careers/jobs/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+    invalidateCatalogCache('careers');
+    return res;
+  },
+
+  async deleteAdminCareerJob(id) {
+    const token = this.getAdminToken();
+    const res = await fetchJson(`/admin/careers/jobs/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    invalidateCatalogCache('careers');
+    return res;
+  },
+
+  async updateAdminCareerApplicationStatus(id, payload) {
+    const token = this.getAdminToken();
+    return fetchJson(`/admin/careers/applications/${encodeURIComponent(id)}/status`, {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+  },
+
+  async deleteAdminCareerApplication(id) {
+    const token = this.getAdminToken();
+    return fetchJson(`/admin/careers/applications/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
   },
 
   async updateAdminSiteSettings(payload) {

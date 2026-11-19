@@ -50,6 +50,7 @@ export const NAV_LINKS = [
     ]
   },
   { label: 'Pricing', path: '/pricing' },
+  { label: 'Careers', path: '/careers' },
   { label: 'FAQ', path: '/faq' },
   { label: 'Contact', path: '/contact' }
 ];

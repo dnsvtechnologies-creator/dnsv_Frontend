@@ -20,6 +20,7 @@ import { AdminSettingsPanel } from './components/AdminCmsAndSettings.jsx';
 import AdminPricingPanel from './components/AdminPricingPanel.jsx';
 import AdminProductsPanel from './components/AdminProductsPanel.jsx';
 import AdminServicesPanel from './components/AdminServicesPanel.jsx';
+import AdminCareersPanel from './components/AdminCareersPanel.jsx';
 
 const TAB_TITLES = {
   overview: 'Overview',
@@ -31,6 +32,7 @@ const TAB_TITLES = {
   pricing: 'Pricing Plans Management',
   products: 'Products Catalog Management',
   services: 'Services Catalog Management',
+  careers: 'Careers & Hiring Management',
   settings: 'Site Settings'
 };
 
@@ -592,6 +594,12 @@ export default function AdminPage() {
                         </span>
                       </div>
                       <div className="py-2.5 flex items-center justify-between">
+                        <span className="text-slate-600">Careers &amp; Applications</span>
+                        <span className="font-mono tabular-nums font-bold text-[#0F172A]">
+                          {summary.openCareerJobs ?? 0} open roles · {summary.totalCareerApplications ?? 0} candidates
+                        </span>
+                      </div>
+                      <div className="py-2.5 flex items-center justify-between">
                         <span className="text-slate-600">Primary Business Email</span>
                         <span className="font-medium text-[#0284C7] truncate max-w-[175px]">
                           {dashboard?.siteSettings?.contact?.email || dashboard?.siteSettings?.email || 'contact@dnsvtechnologies.com'}
@@ -623,10 +631,17 @@ export default function AdminPage() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setActiveTab('settings')}
-                        className="py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-[#0F172A] transition-colors"
+                        onClick={() => setActiveTab('careers')}
+                        className="py-2 px-3 rounded-xl text-xs font-semibold bg-sky-50 hover:bg-sky-100 text-[#0284C7] transition-colors"
                       >
-                        Edit Settings
+                        Manage Careers
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('settings')}
+                        className="col-span-2 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-[#0F172A] transition-colors"
+                      >
+                        Edit Site Settings
                       </button>
                     </div>
                   </div>
@@ -1168,6 +1183,40 @@ export default function AdminPage() {
               }}
               onSavePageConfig={async (payload) => {
                 await apiService.updateAdminServicePageConfig(payload);
+                await loadDashboard();
+              }}
+            />
+          )}
+
+          {/* CAREERS & HIRING TAB */}
+          {activeTab === 'careers' && (
+            <AdminCareersPanel
+              jobs={dashboard?.careerJobs || []}
+              careerConfig={dashboard?.careerConfig}
+              applications={dashboard?.careerApplications || []}
+              onCreateJob={async (payload) => {
+                await apiService.createAdminCareerJob(payload);
+                await loadDashboard();
+              }}
+              onUpdateJob={async (id, payload) => {
+                await apiService.updateAdminCareerJob(id, payload);
+                await loadDashboard();
+              }}
+              onDeleteJob={async (id) => {
+                await apiService.deleteAdminCareerJob(id);
+                await loadDashboard();
+              }}
+              onSaveConfig={async (payload) => {
+                await apiService.updateAdminCareerConfig(payload);
+                await loadDashboard();
+              }}
+              onUpdateApplication={async (id, payload) => {
+                const res = await apiService.updateAdminCareerApplicationStatus(id, payload);
+                await loadDashboard();
+                return res;
+              }}
+              onDeleteApplication={async (id) => {
+                await apiService.deleteAdminCareerApplication(id);
                 await loadDashboard();
               }}
             />

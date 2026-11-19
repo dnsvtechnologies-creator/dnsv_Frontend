@@ -43,6 +43,11 @@ const ROUTE_META = {
     description:
       'Answers to common questions about DNSV custom web development, Mailcurve email marketing quotas, pricing, security, and support SLAs.'
   },
+  '/careers': {
+    title: `Careers & Open Positions — ${SITE_SUFFIX}`,
+    description:
+      'Explore open engineering, DevOps email infrastructure, UI/UX design, and B2B growth roles at DNSV Technologies and apply directly online.'
+  },
   '/privacy': {
     title: `Privacy Policy — ${SITE_SUFFIX}`,
     description:

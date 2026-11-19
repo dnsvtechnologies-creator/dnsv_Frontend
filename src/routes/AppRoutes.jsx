@@ -12,6 +12,7 @@ const PricingPage = lazy(() => import('../pages/Pricing/PricingPage.jsx'));
 const ContactPage = lazy(() => import('../pages/Contact/ContactPage.jsx'));
 const RequestQuotePage = lazy(() => import('../pages/Contact/RequestQuotePage.jsx'));
 const FAQPage = lazy(() => import('../pages/FAQ/FAQPage.jsx'));
+const CareersPage = lazy(() => import('../pages/Careers/CareersPage.jsx'));
 const PrivacyPolicyPage = lazy(() => import('../pages/Legal/PrivacyPolicyPage.jsx'));
 const TermsPage = lazy(() => import('../pages/Legal/TermsPage.jsx'));
 const AdminPage = lazy(() => import('../pages/Admin/AdminPage.jsx'));
@@ -54,6 +55,7 @@ export default function AppRoutes() {
           <Route path="request-quote" element={<RequestQuotePage />} />
           <Route path="portal" element={<UserPortalPage />} />
           <Route path="faq" element={<FAQPage />} />
+          <Route path="careers" element={<CareersPage />} />
 
           {/* Legal */}
           <Route path="privacy" element={<PrivacyPolicyPage />} />

@@ -259,6 +259,17 @@ export default function Navbar() {
             </Link>
 
             <Link
+              to="/careers"
+              className={`transition-colors whitespace-nowrap ${
+                isActive('/careers')
+                  ? 'text-[#0284C7] font-bold'
+                  : 'text-slate-700 hover:text-[#0284C7]'
+              }`}
+            >
+              Careers
+            </Link>
+
+            <Link
               to="/contact"
               className={`transition-colors whitespace-nowrap ${
                 isActive('/contact')
@@ -406,6 +417,16 @@ export default function Navbar() {
               }`}
             >
               Frequently Asked Questions
+            </Link>
+            <Link
+              to="/careers"
+              className={`py-2 px-3 rounded-lg ${
+                isActive('/careers')
+                  ? 'bg-[#2563EB] text-[#F7F7F2] font-bold'
+                  : 'text-[#111111] hover:bg-[#FFFFFF]'
+              }`}
+            >
+              Careers
             </Link>
             <Link
               to="/contact"
