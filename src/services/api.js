@@ -131,28 +131,6 @@ export const apiService = {
     });
   },
 
-  // Blog Posts
-  async getBlogPosts(params = {}) {
-    const query = new URLSearchParams();
-    if (params.category && params.category !== 'All') query.append('category', params.category);
-    if (params.search) query.append('search', params.search);
-
-    const queryString = query.toString() ? `?${query.toString()}` : '';
-    return fetchJson(`/blog${queryString}`);
-  },
-
-  async getBlogPostBySlug(slug) {
-    return fetchJson(`/blog/${slug}`);
-  },
-
-  // Portfolio
-  async getPortfolioProjects(params = {}) {
-    const query = new URLSearchParams();
-    if (params.category && params.category !== 'All') query.append('category', params.category);
-    const queryString = query.toString() ? `?${query.toString()}` : '';
-    return fetchJson(`/portfolio${queryString}`);
-  },
-
   // Products (Dynamic SaaS Catalog — deduplicated + cached)
   async getProducts() {
     return cachedGet('products', async () => {
@@ -389,40 +367,6 @@ export const apiService = {
   async deleteAdminSubscriber(id) {
     const token = this.getAdminToken();
     return fetchJson(`/admin/newsletter/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
-  },
-
-  async createAdminBlogPost(payload) {
-    const token = this.getAdminToken();
-    return fetchJson('/admin/blog', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: JSON.stringify(payload)
-    });
-  },
-
-  async deleteAdminBlogPost(id) {
-    const token = this.getAdminToken();
-    return fetchJson(`/admin/blog/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
-  },
-
-  async createAdminPortfolioProject(payload) {
-    const token = this.getAdminToken();
-    return fetchJson('/admin/portfolio', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: JSON.stringify(payload)
-    });
-  },
-
-  async deleteAdminPortfolioProject(id) {
-    const token = this.getAdminToken();
-    return fetchJson(`/admin/portfolio/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     });

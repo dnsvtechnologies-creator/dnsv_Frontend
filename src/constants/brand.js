@@ -19,10 +19,10 @@ export const BRAND = {
     darkNavy: '#17213A'
   },
   contact: {
-    email: 'contact@dnsvtechnologies.com',
-    supportEmail: 'support@dnsvtechnologies.com',
-    phone: '+91 (India HQ — Inquiries via Quote / Form)',
-    businessHours: 'Monday - Saturday: 09:30 AM - 06:30 PM IST',
+    email: 'contact.dnsvtechnologies@gmail.com',
+    supportEmail: 'support.dnsvtechnologies@gmail.com',
+    phone: '+91 8866234169',
+    businessHours: 'Monday - Friday: 09:30 AM - 06:30 PM IST',
     location: 'India (Serving Global & Regional Clients)'
   }
 };
@@ -50,8 +50,6 @@ export const NAV_LINKS = [
     ]
   },
   { label: 'Pricing', path: '/pricing' },
-  { label: 'Portfolio', path: '/portfolio' },
-  { label: 'Blog', path: '/blog' },
   { label: 'FAQ', path: '/faq' },
   { label: 'Contact', path: '/contact' }
 ];

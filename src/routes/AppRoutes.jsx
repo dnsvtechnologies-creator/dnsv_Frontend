@@ -9,12 +9,9 @@ const ServiceDetailPage = lazy(() => import('../pages/Services/ServiceDetailPage
 const ProductsPage = lazy(() => import('../pages/Products/ProductsPage.jsx'));
 const ProductDetailPage = lazy(() => import('../pages/Products/ProductDetailPage.jsx'));
 const PricingPage = lazy(() => import('../pages/Pricing/PricingPage.jsx'));
-const PortfolioPage = lazy(() => import('../pages/Portfolio/PortfolioPage.jsx'));
 const ContactPage = lazy(() => import('../pages/Contact/ContactPage.jsx'));
 const RequestQuotePage = lazy(() => import('../pages/Contact/RequestQuotePage.jsx'));
 const FAQPage = lazy(() => import('../pages/FAQ/FAQPage.jsx'));
-const BlogPage = lazy(() => import('../pages/Blog/BlogPage.jsx'));
-const BlogPostDetailPage = lazy(() => import('../pages/Blog/BlogPostDetailPage.jsx'));
 const PrivacyPolicyPage = lazy(() => import('../pages/Legal/PrivacyPolicyPage.jsx'));
 const TermsPage = lazy(() => import('../pages/Legal/TermsPage.jsx'));
 const AdminPage = lazy(() => import('../pages/Admin/AdminPage.jsx'));
@@ -51,17 +48,12 @@ export default function AppRoutes() {
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/:slug" element={<ProductDetailPage />} />
           
-          {/* Pricing, Portfolio, Inquiries */}
+          {/* Pricing & Inquiries */}
           <Route path="pricing" element={<PricingPage />} />
-          <Route path="portfolio" element={<PortfolioPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="request-quote" element={<RequestQuotePage />} />
           <Route path="portal" element={<UserPortalPage />} />
           <Route path="faq" element={<FAQPage />} />
-          
-          {/* Blog */}
-          <Route path="blog" element={<BlogPage />} />
-          <Route path="blog/:slug" element={<BlogPostDetailPage />} />
 
           {/* Legal */}
           <Route path="privacy" element={<PrivacyPolicyPage />} />

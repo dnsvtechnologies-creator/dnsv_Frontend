@@ -242,28 +242,6 @@ export default function Navbar() {
             </Link>
 
             <Link
-              to="/portfolio"
-              className={`transition-colors whitespace-nowrap ${
-                isActive('/portfolio')
-                  ? 'text-[#0284C7] font-bold'
-                  : 'text-slate-700 hover:text-[#0284C7]'
-              }`}
-            >
-              Portfolio
-            </Link>
-
-            <Link
-              to="/blog"
-              className={`transition-colors whitespace-nowrap ${
-                isActive('/blog')
-                  ? 'text-[#0284C7] font-bold'
-                  : 'text-slate-700 hover:text-[#0284C7]'
-              }`}
-            >
-              Blog
-            </Link>
-
-            <Link
               to="/contact"
               className={`transition-colors whitespace-nowrap ${
                 isActive('/contact')
@@ -397,26 +375,6 @@ export default function Navbar() {
               }`}
             >
               Pricing Plans
-            </Link>
-            <Link
-              to="/portfolio"
-              className={`py-2 px-3 rounded-lg ${
-                isActive('/portfolio')
-                  ? 'bg-[#2563EB] text-[#F7F7F2] font-bold'
-                  : 'text-[#111111] hover:bg-[#FFFFFF]'
-              }`}
-            >
-              Portfolio & Prototypes
-            </Link>
-            <Link
-              to="/blog"
-              className={`py-2 px-3 rounded-lg ${
-                isActive('/blog')
-                  ? 'bg-[#2563EB] text-[#F7F7F2] font-bold'
-                  : 'text-[#111111] hover:bg-[#FFFFFF]'
-              }`}
-            >
-              Engineering Blog
             </Link>
             <Link
               to="/faq"

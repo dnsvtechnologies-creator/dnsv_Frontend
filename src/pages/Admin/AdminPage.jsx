@@ -16,7 +16,7 @@ import { FadeIn, StaggerContainer, StaggerItem } from '../../components/animatio
 import AdminSidebar from './components/AdminSidebar.jsx';
 import AdminLoginView from './components/AdminLoginView.jsx';
 import AdminDetailModal from './components/AdminDetailModal.jsx';
-import { AdminCmsPanel, AdminSettingsPanel } from './components/AdminCmsAndSettings.jsx';
+import { AdminSettingsPanel } from './components/AdminCmsAndSettings.jsx';
 import AdminPricingPanel from './components/AdminPricingPanel.jsx';
 import AdminProductsPanel from './components/AdminProductsPanel.jsx';
 
@@ -29,7 +29,6 @@ const TAB_TITLES = {
   newsletter: 'Newsletter Subscribers',
   pricing: 'Pricing Plans Management',
   products: 'Products Catalog Management',
-  cms: 'Blog & Portfolio Content',
   settings: 'Site Settings'
 };
 
@@ -591,14 +590,6 @@ export default function AdminPage() {
                         </span>
                       </div>
                       <div className="py-2.5 flex items-center justify-between">
-                        <span className="text-slate-600">Published Blog Articles</span>
-                        <span className="font-mono tabular-nums font-bold text-[#0F172A]">{summary.totalBlogs ?? 0}</span>
-                      </div>
-                      <div className="py-2.5 flex items-center justify-between">
-                        <span className="text-slate-600">Portfolio Case Studies</span>
-                        <span className="font-mono tabular-nums font-bold text-[#0F172A]">{summary.totalPortfolio ?? 0}</span>
-                      </div>
-                      <div className="py-2.5 flex items-center justify-between">
                         <span className="text-slate-600">Primary Business Email</span>
                         <span className="font-medium text-[#0284C7] truncate max-w-[175px]">
                           {dashboard?.siteSettings?.contact?.email || dashboard?.siteSettings?.email || 'contact@dnsvtechnologies.com'}
@@ -623,10 +614,10 @@ export default function AdminPage() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setActiveTab('cms')}
+                        onClick={() => setActiveTab('users')}
                         className="py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-[#0F172A] transition-colors"
                       >
-                        Blog &amp; Portfolio
+                        Users &amp; Leads
                       </button>
                       <button
                         type="button"
@@ -1151,30 +1142,6 @@ export default function AdminPage() {
               }}
               onDeleteProduct={async (id) => {
                 await apiService.deleteAdminProduct(id);
-                await loadDashboard();
-              }}
-            />
-          )}
-
-          {/* CMS TAB (BLOG & PORTFOLIO) */}
-          {activeTab === 'cms' && (
-            <AdminCmsPanel
-              blogs={dashboard?.blogs || []}
-              portfolio={dashboard?.portfolio || []}
-              onCreateBlog={async (payload) => {
-                await apiService.createAdminBlogPost(payload);
-                await loadDashboard();
-              }}
-              onDeleteBlog={async (id) => {
-                await apiService.deleteAdminBlogPost(id);
-                await loadDashboard();
-              }}
-              onCreatePortfolio={async (payload) => {
-                await apiService.createAdminPortfolioProject(payload);
-                await loadDashboard();
-              }}
-              onDeletePortfolio={async (id) => {
-                await apiService.deleteAdminPortfolioProject(id);
                 await loadDashboard();
               }}
             />

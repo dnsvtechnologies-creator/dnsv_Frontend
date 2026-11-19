@@ -28,11 +28,6 @@ const ROUTE_META = {
     description:
       'Compare INR pricing plans for Mailcurve email marketing campaigns, custom website builds, and combined enterprise growth packages.'
   },
-  '/portfolio': {
-    title: `Case Studies & Portfolio — ${SITE_SUFFIX}`,
-    description:
-      'Explore shipped web platforms, SaaS dashboards, email infrastructure, and enterprise software systems engineered by DNSV Technologies.'
-  },
   '/contact': {
     title: `Contact Us — ${SITE_SUFFIX}`,
     description:
@@ -47,11 +42,6 @@ const ROUTE_META = {
     title: `Frequently Asked Questions — ${SITE_SUFFIX}`,
     description:
       'Answers to common questions about DNSV custom web development, Mailcurve email marketing quotas, pricing, security, and support SLAs.'
-  },
-  '/blog': {
-    title: `Engineering Insights & Blog — ${SITE_SUFFIX}`,
-    description:
-      'Technical articles and guides on email deliverability, scalable web architecture, REST APIs, and SaaS engineering from DNSV Technologies.'
   },
   '/privacy': {
     title: `Privacy Policy — ${SITE_SUFFIX}`,
@@ -112,12 +102,6 @@ export function usePageSeo(pathname = '/') {
         meta = {
           title: `${label.replace(/\b\w/g, (c) => c.toUpperCase())} Platform — ${SITE_SUFFIX}`,
           description: `Explore features, technical policies, and onboarding details for ${label} by DNSV Technologies.`
-        };
-      } else if (cleanPath.startsWith('/blog/')) {
-        const label = cleanPath.split('/').pop().replace(/-/g, ' ');
-        meta = {
-          title: `${label.replace(/\b\w/g, (c) => c.toUpperCase())} — ${SITE_SUFFIX} Blog`,
-          description: `Read engineering insights on ${label} from DNSV Technologies.`
         };
       } else {
         meta = ROUTE_META['/'];

@@ -6,7 +6,6 @@ import {
   MessageSquare,
   Layers,
   Mail,
-  BookOpen,
   Tag,
   Package,
   Settings,
@@ -33,7 +32,6 @@ export default function AdminSidebar({
     { id: 'newsletter', label: 'Newsletter List', icon: Mail, count: counts.totalSubscribers ?? 0 },
     { id: 'pricing', label: 'Pricing Plans', icon: Tag, count: counts.totalPricingPlans ?? 0 },
     { id: 'products', label: 'Products Catalog', icon: Package, count: counts.totalProducts ?? 0 },
-    { id: 'cms', label: 'Blog & Portfolio', icon: BookOpen, count: (counts.totalBlogs ?? 0) + (counts.totalPortfolio ?? 0) },
     { id: 'settings', label: 'Site Settings', icon: Settings, count: null }
   ];
 
